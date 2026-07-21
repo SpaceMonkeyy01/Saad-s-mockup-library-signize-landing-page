@@ -1,0 +1,28 @@
+# Render Blueprint (Infrastructure as Code)
+# Spec reference: https://render.com/docs/blueprint-spec
+#
+# With this file committed to the repo root, you can create the site by
+# choosing "New > Blueprint" in the Render Dashboard and pointing it at
+# this repo — no manual form fields to fill in.
+
+services:
+  - type: web
+    name: signize
+    runtime: static          # 'env: static' is deprecated — use 'runtime'
+    plan: free
+    # The site is a single static index.html at the repo root, so there is
+    # nothing to compile. No buildCommand is needed.
+    staticPublishPath: .     # serve files from the repo root
+
+    # Sensible default response headers (optional but recommended).
+    # Render already redirects HTTP -> HTTPS automatically.
+    headers:
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin

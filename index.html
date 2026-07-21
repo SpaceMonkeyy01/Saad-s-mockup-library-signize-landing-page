@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signize — Sign Mockup Studio</title>
+<meta name="description" content="Photorealistic sign mockups in seconds. Upload your logo, pick a sign type, see it on your wall.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #ffffff;
+    --wall: #f4f7fb;
+    --blue-deep: #123a6b;
+    --blue: #1f6feb;
+    --blue-bright: #4a94ff;
+    --blue-wash: #e8f0fc;
+    --ink: #14243a;
+    --muted: #6b7c93;
+    --line: #dbe4f0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Archivo', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  /* ---------- Toolbar: filters + view toggle ---------- */
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0 0 32px;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .viewtoggle {
+    display: flex;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px;
+    background: var(--paper);
+    flex-shrink: 0;
+  }
+
+  .vbtn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--muted);
+    background: transparent;
+    border: none;
+    border-radius: 999px;
+    padding: 6px 15px;
+    cursor: pointer;
+    transition: color 0.18s, background 0.18s;
+  }
+
+  .vbtn:hover { color: var(--blue-deep); }
+
+  .vbtn[aria-pressed="true"] {
+    color: #ffffff;
+    background: var(--blue);
+    font-weight: 600;
+  }
+
+  .vbtn svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
+
+  .chip {
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.86rem;
+    font-weight: 500;
+    color: var(--muted);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: color 0.18s, border-color 0.18s, box-shadow 0.18s, background 0.18s;
+  }
+
+  .chip:hover {
+    color: var(--blue-deep);
+    border-color: var(--blue-bright);
+    background: var(--blue-wash);
+  }
+
+  .chip[aria-pressed="true"] {
+    color: #ffffff;
+    background: var(--blue);
+    border-color: var(--blue);
+    box-shadow: 0 4px 14px -4px rgba(31, 111, 235, 0.5);
+    font-weight: 600;
+  }
+
+  .chip:focus-visible,
+  .vbtn:focus-visible,
+  .card-link:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 3px;
+  }
+
+  /* ---------- Card grid ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  /* ---------- List view ---------- */
+  .grid.is-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .grid.is-list .card {
+    display: grid;
+    grid-template-columns: 148px minmax(190px, 1.05fr) 1.9fr auto;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 22px;
+  }
+
+  .grid.is-list .card[hidden] { display: none; }
+
+  .grid.is-list .card h3 { font-size: 1.28rem; }
+
+  .grid.is-list .card p {
+    flex-grow: 0;
+    font-size: 0.86rem;
+  }
+
+  .grid.is-list .card-foot { margin-top: 0; white-space: nowrap; }
+
+  .grid.is-list .card::before { top: 10px; bottom: 10px; }
+
+  @media (max-width: 860px) {
+    .grid.is-list .card {
+      grid-template-columns: 1fr;
+      align-items: start;
+      gap: 8px;
+      padding: 18px 22px;
+    }
+  }
+
+  .card {
+    position: relative;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.25s;
+  }
+
+  /* Left edge fills in on hover, like a letter being mounted */
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 14px; bottom: 14px; left: -1px;
+    width: 3px;
+    border-radius: 3px;
+    background: var(--blue);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.25s ease;
+  }
+
+  .card:hover {
+    border-color: #b9cfe9;
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px -18px rgba(18, 58, 107, 0.45);
+  }
+
+  .card:hover::before { transform: scaleY(1); }
+
+  .card[hidden] { display: none; }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+
+  .card h3 {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 0.03em;
+    line-height: 1.15;
+    color: var(--blue-deep);
+    transition: color 0.2s;
+  }
+
+  .card:hover h3 { color: var(--blue); }
+
+  .card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    flex-grow: 1;
+  }
+
+  .card-foot {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 4px;
+  }
+
+  .card-link {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--blue);
+    text-decoration: none;
+  }
+
+  /* GitHub link sits above the full-card overlay so it stays clickable */
+  .gh-link {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.18s;
+  }
+
+  .gh-link:hover { color: var(--blue-deep); }
+
+  .gh-link svg { width: 15px; height: 15px; fill: currentColor; }
+
+  .gh-link:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .card-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+  }
+
+  .card-link .arrow {
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+
+  .card:hover .arrow { transform: translateX(4px); }
+
+  /* ---------- Empty state & footer ---------- */
+  .empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 60px 0;
+    font-size: 0.95rem;
+  }
+
+  footer {
+    margin-top: 80px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+  }
+
+  footer .byline strong {
+    color: var(--blue-deep);
+    font-weight: 500;
+  }
+
+  @media (max-width: 560px) {
+    .wrap { padding-top: 36px; }
+    .filters { gap: 8px; }
+    .chip { padding: 7px 14px; font-size: 0.82rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="toolbar">
+    <nav class="filters" aria-label="Filter sign types">
+      <button class="chip" data-filter="all" aria-pressed="true">All types</button>
+      <button class="chip" data-filter="illuminated" aria-pressed="false">Illuminated</button>
+      <button class="chip" data-filter="nonlit" aria-pressed="false">Non-Illuminated</button>
+      <button class="chip" data-filter="freestanding" aria-pressed="false">Freestanding Signs</button>
+      <button class="chip" data-filter="building" aria-pressed="false">Building/Wall Signs</button>
+    </nav>
+
+    <div class="viewtoggle" role="group" aria-label="Change layout">
+      <button class="vbtn" data-view="grid" aria-pressed="true">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="7" height="7" rx="1.5"/><rect x="9" y="0" width="7" height="7" rx="1.5"/><rect x="0" y="9" width="7" height="7" rx="1.5"/><rect x="9" y="9" width="7" height="7" rx="1.5"/></svg>
+        Grid
+      </button>
+      <button class="vbtn" data-view="list" aria-pressed="false">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="1" width="16" height="3" rx="1.5"/><rect x="0" y="6.5" width="16" height="3" rx="1.5"/><rect x="0" y="12" width="16" height="3" rx="1.5"/></svg>
+        List
+      </button>
+    </div>
+  </div>
+
+  <main class="grid" id="grid">
+
+    <!-- Illuminated -->
+
+    <article class="card" data-cat="illuminated">
+      <span class="eyebrow">ILLUMINATED DIMENSIONAL LETTERS</span>
+      <h3>Face-Lit Channel Letters</h3>
+      <p>Letters that glow through their faces — the classic storefront look.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://saad-s-face-lit-channel-letters-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Face-Lit-Channel-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+    <article class="card" data-cat="illuminated">
+      <span class="eyebrow">ILLUMINATED DIMENSIONAL LETTERS</span>
+      <h3>Halo-Lit Channel Letters</h3>
+      <p>Light spills from behind each letter, casting a soft halo on the wall.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://saad-s-halo-lit-channel-letters-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Halo-Lit-Channel-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+    <article class="card" data-cat="illuminated">
+      <span class="eyebrow">ILLUMINATED DIMENSIONAL LETTERS</span>
+      <h3>Face &amp; Halo-Lit Channel Letters</h3>
+      <p>Lit faces plus a halo behind — glow from the front and the back.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://face-halo-lit-channel-letters-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Face-Halo-Lit-Channel-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+    <article class="card" data-cat="illuminated">
+      <span class="eyebrow">ILLUMINATED DIMENSIONAL LETTERS</span>
+      <h3>Side-Lit Channel Letters</h3>
+      <p>Glowing sides trace each letter while the face stays dark.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://saad-s-side-lit-channel-letters-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Side-Lit-Channel-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+    <article class="card" data-cat="illuminated">
+      <span class="eyebrow">ILLUMINATED DIMENSIONAL LETTERS</span>
+      <h3>Face &amp; Side-Lit Channel Letters</h3>
+      <p>Faces and sides both lit, for maximum presence on the wall.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://saad-s-face-side-lit-channel-letters-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Face-Side-Lit-Channel-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+    <article class="card" data-cat="illuminated">
+      <span class="eyebrow">ILLUMINATED DIMENSIONAL LETTERS</span>
+      <h3>Open Face Neon</h3>
+      <p>Exposed tube inside open channel letters — the classic diner look.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://saad-s-open-face-neon-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Open-Face-Neon-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+    <article class="card" data-cat="illuminated">
+      <span class="eyebrow">LED NEON SIGNS</span>
+      <h3>LED Neon</h3>
+      <p>Continuous LED tube bent to your artwork — vivid, even glow.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://saad-s-led-neon-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-LED-Neon-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+    <article class="card" data-cat="illuminated">
+      <span class="eyebrow">LIGHTBOX/CABINET SIGNS</span>
+      <h3>LightBox Cabinet</h3>
+      <p>An internally lit cabinet that carries your full design edge to edge.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://saad-s-lightbox-cabinet-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-LightBox-Cabinet-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+    <article class="card" data-cat="illuminated">
+      <span class="eyebrow">PUSH-THROUGH SIGNAGE</span>
+      <h3>Push-Through Signage</h3>
+      <p>Acrylic letters push through a solid panel and glow proud of the face.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://saad-s-pushthrough-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-PushThrough-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+    <!-- Non-Illuminated -->
+
+    <article class="card" data-cat="nonlit">
+      <span class="eyebrow">DIMENSIONAL FABRICATED LETTERS</span>
+      <h3>Fabricated Non-Lit Letters</h3>
+      <p>Dimensional built-up metal letters — depth without illumination.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://saad-s-fabricated-non-lit-letters-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Fabricated-Non-Lit-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+    <article class="card" data-cat="nonlit">
+      <span class="eyebrow">DIMENSIONAL FLAT CUT LETTERS</span>
+      <h3>Flat Cut Letters</h3>
+      <p>Clean flat letters cut from metal or acrylic.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://saad-s-flat-cut-letters-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Flat-Cut-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+    <article class="card" data-cat="nonlit">
+      <span class="eyebrow">WALL PLAQUES</span>
+      <h3>Wall Plaque</h3>
+      <p>A finished plaque for entrances, dedications, and directories.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://saad-s-wall-plaque-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Wall-Plaque-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+    <article class="card" data-cat="nonlit">
+      <span class="eyebrow">WOODEN SIGNS</span>
+      <h3>Wooden Sign</h3>
+      <p>Carved wood with routed detail and hand-finished character.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://saad-s-wooden-sign-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Wooden-Sign" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+    <!-- Freestanding Signs -->
+
+    <article class="card" data-cat="freestanding">
+      <span class="eyebrow">BLADE/PROJECTING SIGNS</span>
+      <h3>Blade Projected Sign</h3>
+      <p>Mounted out from the wall — readable from both directions down the street.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://saad-s-blade-projected-sign-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Blade-Projected-Sign-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+    <!-- Building / Wall Signs -->
+
+    <article class="card" data-cat="building">
+      <span class="eyebrow">MARQUEE SIGNS</span>
+      <h3>Marquee Channel Letters</h3>
+      <p>Channel letters ringed with exposed bulbs — vintage theatre marquee glow.</p>
+      <div class="card-foot">
+        <a class="card-link" href="https://saad-s-marquee-channel-letters-v1-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Marquee-Channel-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+      </div>
+    </article>
+
+  </main>
+
+  <p class="empty" id="empty" hidden>No sign types in this category yet.</p>
+
+  <footer>
+    <span>SIGNIZE &middot; SIGN MOCKUP SUITE</span>
+    <span class="byline">BUILT BY <strong>SAAD A.</strong></span>
+    <span>MORE SIGN TYPES COMING SOON</span>
+  </footer>
+
+</div>
+
+<script>
+  const chips = document.querySelectorAll('.chip');
+  const cards = document.querySelectorAll('.card');
+  const empty = document.getElementById('empty');
+  const grid = document.getElementById('grid');
+  const vbtns = document.querySelectorAll('.vbtn');
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'));
+      const filter = chip.dataset.filter;
+      let visible = 0;
+      cards.forEach(card => {
+        const show = filter === 'all' || card.dataset.cat === filter;
+        card.hidden = !show;
+        if (show) visible++;
+      });
+      empty.hidden = visible > 0;
+    });
+  });
+
+  vbtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      vbtns.forEach(b => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'));
+      grid.classList.toggle('is-list', btn.dataset.view === 'list');
+    });
+  });
+</script>
+</body>
+</html>

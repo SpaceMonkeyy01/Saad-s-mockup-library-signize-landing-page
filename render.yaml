@@ -9,7 +9,7 @@ services:
   - type: web
     name: signize
     runtime: static          # 'env: static' is deprecated — use 'runtime'
-    plan: free
+    # No 'plan' field: static sites are always free and reject a plan key.
     # The site is a single static index.html at the repo root, so there is
     # nothing to compile. No buildCommand is needed.
     staticPublishPath: .     # serve files from the repo root

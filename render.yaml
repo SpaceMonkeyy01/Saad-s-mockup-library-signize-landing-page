@@ -7,7 +7,7 @@
 
 services:
   - type: web
-    name: signize
+    name: mockups-signize
     runtime: static          # 'env: static' is deprecated — use 'runtime'
     # No 'plan' field: static sites are always free and reject a plan key.
     # The site is a single static index.html at the repo root, so there is

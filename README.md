@@ -9,8 +9,7 @@ framework, no package manager.
 
 ## Live site
 
-> Replace this with your Render URL after the first deploy, e.g.
-> `https://signize.onrender.com`
+<https://mockups-signize.onrender.com>
 
 ## Features
 

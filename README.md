@@ -25,36 +25,36 @@ framework, no package manager.
 
 | Sign | Type | Studio | Source |
 |------|------|--------|--------|
-| Face‑Lit Channel Letters | Illuminated Dimensional Letters | [Open](https://saad-s-face-lit-channel-letters-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Face-Lit-Channel-Letters-v1.0) |
-| Halo‑Lit Channel Letters | Illuminated Dimensional Letters | [Open](https://saad-s-halo-lit-channel-letters-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Halo-Lit-Channel-Letters-v1.0) |
-| Face & Halo‑Lit Channel Letters | Illuminated Dimensional Letters | [Open](https://face-halo-lit-channel-letters-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Face-Halo-Lit-Channel-Letters-v1.0) |
-| Side‑Lit Channel Letters | Illuminated Dimensional Letters | [Open](https://saad-s-side-lit-channel-letters-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Side-Lit-Channel-Letters-v1.0) |
-| Face & Side‑Lit Channel Letters | Illuminated Dimensional Letters | [Open](https://saad-s-face-side-lit-channel-letters-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Face-Side-Lit-Channel-Letters-v1.0) |
-| Open Face Neon | Illuminated Dimensional Letters | [Open](https://saad-s-open-face-neon-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Open-Face-Neon-v1.0) |
-| LED Neon | LED Neon Signs | [Open](https://saad-s-led-neon-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-LED-Neon-v1.0) |
-| LightBox Cabinet | Lightbox/Cabinet Signs | [Open](https://saad-s-lightbox-cabinet-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-LightBox-Cabinet-v1.0) |
-| Push‑Through Signage | Push‑Through Signage | [Open](https://saad-s-pushthrough-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-PushThrough-v1.0) |
+| Face‑Lit Channel Letters | Illuminated Dimensional Letters | [Open](https://saad-s-face-lit-channel-letters-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Face-Lit-Channel-Letters-v1.0) |
+| Halo‑Lit Channel Letters | Illuminated Dimensional Letters | [Open](https://saad-s-halo-lit-channel-letters-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Halo-Lit-Channel-Letters-v1.0) |
+| Face & Halo‑Lit Channel Letters | Illuminated Dimensional Letters | [Open](https://face-halo-lit-channel-letters-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Face-Halo-Lit-Channel-Letters-v1.0) |
+| Side‑Lit Channel Letters | Illuminated Dimensional Letters | [Open](https://saad-s-side-lit-channel-letters-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Side-Lit-Channel-Letters-v1.0) |
+| Face & Side‑Lit Channel Letters | Illuminated Dimensional Letters | [Open](https://saad-s-face-side-lit-channel-letters-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Face-Side-Lit-Channel-Letters-v1.0) |
+| Open Face Neon | Illuminated Dimensional Letters | [Open](https://saad-s-open-face-neon-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Open-Face-Neon-v1.0) |
+| LED Neon | LED Neon Signs | [Open](https://saad-s-led-neon-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-LED-Neon-v1.0) |
+| LightBox Cabinet | Lightbox/Cabinet Signs | [Open](https://saad-s-lightbox-cabinet-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-LightBox-Cabinet-v1.0) |
+| Push‑Through Signage | Push‑Through Signage | [Open](https://saad-s-pushthrough-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-PushThrough-v1.0) |
 
 ### Non‑Illuminated
 
 | Sign | Type | Studio | Source |
 |------|------|--------|--------|
-| Fabricated Non‑Lit Letters | Dimensional Fabricated Letters | [Open](https://saad-s-fabricated-non-lit-letters-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Fabricated-Non-Lit-Letters-v1.0) |
-| Flat Cut Letters | Dimensional Flat Cut Letters | [Open](https://saad-s-flat-cut-letters-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Flat-Cut-Letters-v1.0) |
-| Wall Plaque | Wall Plaques | [Open](https://saad-s-wall-plaque-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Wall-Plaque-v1.0) |
-| Wooden Sign | Wooden Signs | [Open](https://saad-s-wooden-sign-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Wooden-Sign) |
+| Fabricated Non‑Lit Letters | Dimensional Fabricated Letters | [Open](https://saad-s-fabricated-non-lit-letters-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Fabricated-Non-Lit-Letters-v1.0) |
+| Flat Cut Letters | Dimensional Flat Cut Letters | [Open](https://saad-s-flat-cut-letters-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Flat-Cut-Letters-v1.0) |
+| Wall Plaque | Wall Plaques | [Open](https://saad-s-wall-plaque-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Wall-Plaque-v1.0) |
+| Wooden Sign | Wooden Signs | [Open](https://saad-s-wooden-sign-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Wooden-Sign) |
 
 ### Freestanding Signs
 
 | Sign | Type | Studio | Source |
 |------|------|--------|--------|
-| Blade Projected Sign | Blade/Projecting Signs | [Open](https://saad-s-blade-projected-sign-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Blade-Projected-Sign-v1.0) |
+| Blade Projected Sign | Blade/Projecting Signs | [Open](https://saad-s-blade-projected-sign-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Blade-Projected-Sign-v1.0) |
 
 ### Building/Wall Signs
 
 | Sign | Type | Studio | Source |
 |------|------|--------|--------|
-| Marquee Channel Letters | Marquee Signs | [Open](https://saad-s-marquee-channel-letters-v1-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Marquee-Channel-Letters-v1.0) |
+| Marquee Channel Letters | Marquee Signs | [Open](https://saad-s-marquee-channel-letters-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Marquee-Channel-Letters-v1.0) |
 
 ## Run locally
 

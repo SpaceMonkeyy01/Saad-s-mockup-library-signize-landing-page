@@ -153,7 +153,7 @@
 
   .grid.is-list .card h3 { font-size: 1.28rem; }
 
-  .grid.is-list .card p {
+  .grid.is-list .card p:not(.ver-notes) {
     flex-grow: 0;
     font-size: 0.86rem;
   }
@@ -225,7 +225,7 @@
 
   .card:hover h3 { color: var(--blue); }
 
-  .card p {
+  .card p:not(.ver-notes) {
     font-size: 0.9rem;
     color: var(--muted);
     flex-grow: 1;
@@ -234,7 +234,9 @@
   .card-foot {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 16px;
+    row-gap: 10px;
     margin-top: 4px;
   }
 
@@ -282,6 +284,134 @@
   }
 
   .card:hover .arrow { transform: translateX(4px); }
+
+  /* ---------- Version badge, expand toggle & panel ---------- */
+  .ver-badge {
+    display: inline-block;
+    vertical-align: middle;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--blue);
+    background: var(--blue-wash);
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-left: 8px;
+    position: relative;
+    top: -3px;
+  }
+
+  /* Sits above the full-card link overlay so it stays clickable */
+  .ver-toggle {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 11px;
+    cursor: pointer;
+    transition: color 0.18s, border-color 0.18s, background 0.18s;
+  }
+
+  .ver-toggle:hover {
+    color: var(--blue-deep);
+    border-color: var(--blue-bright);
+    background: var(--blue-wash);
+  }
+
+  .ver-toggle:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+
+  .ver-toggle .caret {
+    display: inline-block;
+    font-size: 0.5rem;
+    transition: transform 0.2s ease;
+  }
+
+  .ver-toggle[aria-expanded="true"] .caret { transform: rotate(180deg); }
+
+  .ver-panel {
+    position: relative;
+    z-index: 2;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line);
+  }
+
+  .ver-panel[hidden] { display: none; }
+
+  .ver-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .ver-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 14px;
+    border-left: 2px solid var(--line);
+  }
+
+  .ver-row.is-latest { border-left-color: var(--blue); }
+
+  .ver-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+
+  .ver-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--blue-deep);
+  }
+
+  .ver-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.14em;
+    color: #ffffff;
+    background: var(--blue);
+    border-radius: 3px;
+    padding: 2px 5px;
+  }
+
+  .ver-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.63rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .card .ver-notes {
+    font-size: 0.84rem;
+    color: var(--muted);
+    flex-grow: 0;
+  }
+
+  .ver-links { display: flex; gap: 15px; margin-top: 3px; }
+
+  .ver-links a {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--blue);
+    text-decoration: none;
+  }
+
+  .ver-links a.gh { font-weight: 500; color: var(--muted); }
+  .ver-links a:hover { text-decoration: underline; }
+
+  /* List view: panel drops below and spans every column */
+  .grid.is-list .ver-panel { grid-column: 1 / -1; }
+  .grid.is-list .ver-toggle { margin-left: 0; }
 
   /* ---------- Empty state & footer ---------- */
   .empty {
@@ -343,220 +473,7 @@
 
   <main class="grid" id="grid">
 
-    <!-- Illuminated -->
-
-    <article class="card" data-cat="illuminated">
-      <span class="eyebrow">ILLUMINATED DIMENSIONAL LETTERS</span>
-      <h3>Face-Lit Channel Letters</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-face-lit-channel-letters-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Face-Lit-Channel-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="illuminated">
-      <span class="eyebrow">ILLUMINATED DIMENSIONAL LETTERS</span>
-      <h3>Halo-Lit Channel Letters</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-halo-lit-channel-letters-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Halo-Lit-Channel-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="illuminated">
-      <span class="eyebrow">ILLUMINATED DIMENSIONAL LETTERS</span>
-      <h3>Halo-Lit Channel Letters v2.0</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-halo-lit-channel-letters-v2-0.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Halo-Lit-Channel-Letters-v2.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="illuminated">
-      <span class="eyebrow">ILLUMINATED DIMENSIONAL LETTERS</span>
-      <h3>Face &amp; Halo-Lit Channel Letters</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://face-halo-lit-channel-letters-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Face-Halo-Lit-Channel-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="illuminated">
-      <span class="eyebrow">ILLUMINATED DIMENSIONAL LETTERS</span>
-      <h3>Side-Lit Channel Letters</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-side-lit-channel-letters-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Side-Lit-Channel-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="illuminated">
-      <span class="eyebrow">ILLUMINATED DIMENSIONAL LETTERS</span>
-      <h3>Face &amp; Side-Lit Channel Letters</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-face-side-lit-channel-letters-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Face-Side-Lit-Channel-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="illuminated">
-      <span class="eyebrow">ILLUMINATED DIMENSIONAL LETTERS</span>
-      <h3>Open Face Neon</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-open-face-neon-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Open-Face-Neon-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="illuminated">
-      <span class="eyebrow">LED NEON SIGNS</span>
-      <h3>LED Neon</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-led-neon-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-LED-Neon-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="illuminated">
-      <span class="eyebrow">LIGHTBOX/CABINET SIGNS</span>
-      <h3>LightBox Cabinet</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-lightbox-cabinet-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-LightBox-Cabinet-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="illuminated">
-      <span class="eyebrow">PUSH-THROUGH SIGNAGE</span>
-      <h3>Push-Through Signage</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-pushthrough-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-PushThrough-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="illuminated">
-      <span class="eyebrow">ILLUMINATED DIMENSIONAL LETTERS</span>
-      <h3>Infinity Mirror</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-infinity-mirror-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Infinity-Mirror-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <!-- Non-Illuminated -->
-
-    <article class="card" data-cat="nonlit">
-      <span class="eyebrow">DIMENSIONAL FABRICATED LETTERS</span>
-      <h3>Fabricated Non-Lit Letters</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-fabricated-non-lit-letters-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Fabricated-Non-Lit-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="nonlit">
-      <span class="eyebrow">DIMENSIONAL FLAT CUT LETTERS</span>
-      <h3>Flat Cut Letters</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-flat-cut-letters-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Flat-Cut-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="nonlit">
-      <span class="eyebrow">WALL PLAQUES</span>
-      <h3>Wall Plaque</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-wall-plaque-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Wall-Plaque-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="nonlit">
-      <span class="eyebrow">WOODEN SIGNS</span>
-      <h3>Wooden Sign</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-wooden-sign-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Wooden-Sign" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="nonlit">
-      <span class="eyebrow">VINYL GRAPHICS</span>
-      <h3>Vinyl Graphics</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-vinyl-graphics-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Vinyl-Graphics-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <!-- Freestanding Signs -->
-
-    <article class="card" data-cat="freestanding">
-      <span class="eyebrow">BLADE/PROJECTING SIGNS</span>
-      <h3>Blade Projected Sign</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-blade-projected-sign-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Blade-Projected-Sign-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="freestanding">
-      <span class="eyebrow">POST &amp; PANEL SIGNS</span>
-      <h3>Post &amp; Panel Sign</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-postpanel-sign-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Post-Panel-Sign-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="freestanding">
-      <span class="eyebrow">PYLON SIGNS</span>
-      <h3>Pylon Sign</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-pylon-sign-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Pylon-Sign-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="freestanding">
-      <span class="eyebrow">A-FRAME SIGNS</span>
-      <h3>A-Frame Sign</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-a-frame-sign-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-A-Frame-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="freestanding">
-      <span class="eyebrow">YARD SIGNS</span>
-      <h3>Yard Sign</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-yard-sign-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Yard-Sign" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <article class="card" data-cat="freestanding">
-      <span class="eyebrow">MONUMENT SIGNS</span>
-      <h3>Monument Sign</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-monument-sign-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Monument-Sign-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
-
-    <!-- Building / Wall Signs -->
-
-    <article class="card" data-cat="building">
-      <span class="eyebrow">MARQUEE SIGNS</span>
-      <h3>Marquee Channel Letters</h3>
-      <div class="card-foot">
-        <a class="card-link" href="https://saad-s-marquee-channel-letters-v1.ai.studio/" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
-        <a class="gh-link" href="https://github.com/SpaceMonkeyy01/Saad-s-Marquee-Channel-Letters-v1.0" target="_blank" rel="noopener" aria-label="View source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-      </div>
-    </article>
+    <!-- Cards render from the SIGNS array in the script below. -->
 
   </main>
 
@@ -571,10 +488,277 @@
 </div>
 
 <script>
-  const chips = document.querySelectorAll('.chip');
-  const cards = document.querySelectorAll('.card');
-  const empty = document.getElementById('empty');
+  /* ------------------------------------------------------------------
+     The sign library. To publish a new version, add an object to the TOP
+     of that sign's `versions` array (newest first) -- the card, the badge,
+     the "N versions" toggle and the panel all update from this. To add a
+     sign type, append a new entry. Nothing below this array needs editing.
+     ------------------------------------------------------------------ */
+  const SIGNS = [
+    {
+      title: "Face-Lit Channel Letters", cat: "illuminated",
+      eyebrow: "ILLUMINATED DIMENSIONAL LETTERS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://saad-s-face-lit-channel-letters-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Face-Lit-Channel-Letters-v1.0" },
+      ],
+    },
+    {
+      title: "Halo-Lit Channel Letters", cat: "illuminated",
+      eyebrow: "ILLUMINATED DIMENSIONAL LETTERS",
+      versions: [  // newest first
+        { v: "2.1", date: "2026-09-01", notes: "Halo-Lit metal variants are added.",
+          url: "https://saad-s-halo-lit-channel-letters-v2-1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Halo-Lit-Channel-Letters-v2.1" },
+        { v: "2.0", date: "2026-08-25", notes: "Improved version after v1 QC.",
+          url: "https://saad-s-halo-lit-channel-letters-v2-0.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Halo-Lit-Channel-Letters-v2.0" },
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://saad-s-halo-lit-channel-letters-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Halo-Lit-Channel-Letters-v1.0" },
+      ],
+    },
+    {
+      title: "Face & Halo-Lit Channel Letters", cat: "illuminated",
+      eyebrow: "ILLUMINATED DIMENSIONAL LETTERS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://face-halo-lit-channel-letters-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Face-Halo-Lit-Channel-Letters-v1.0" },
+      ],
+    },
+    {
+      title: "Side-Lit Channel Letters", cat: "illuminated",
+      eyebrow: "ILLUMINATED DIMENSIONAL LETTERS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://saad-s-side-lit-channel-letters-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Side-Lit-Channel-Letters-v1.0" },
+      ],
+    },
+    {
+      title: "Face & Side-Lit Channel Letters", cat: "illuminated",
+      eyebrow: "ILLUMINATED DIMENSIONAL LETTERS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://saad-s-face-side-lit-channel-letters-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Face-Side-Lit-Channel-Letters-v1.0" },
+      ],
+    },
+    {
+      title: "Open Face Neon", cat: "illuminated",
+      eyebrow: "ILLUMINATED DIMENSIONAL LETTERS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://saad-s-open-face-neon-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Open-Face-Neon-v1.0" },
+      ],
+    },
+    {
+      title: "LED Neon", cat: "illuminated",
+      eyebrow: "LED NEON SIGNS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://saad-s-led-neon-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-LED-Neon-v1.0" },
+      ],
+    },
+    {
+      title: "LightBox Cabinet", cat: "illuminated",
+      eyebrow: "LIGHTBOX/CABINET SIGNS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://saad-s-lightbox-cabinet-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-LightBox-Cabinet-v1.0" },
+      ],
+    },
+    {
+      title: "Push-Through Signage", cat: "illuminated",
+      eyebrow: "PUSH-THROUGH SIGNAGE",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://saad-s-pushthrough-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-PushThrough-v1.0" },
+      ],
+    },
+    {
+      title: "Infinity Mirror", cat: "illuminated",
+      eyebrow: "ILLUMINATED DIMENSIONAL LETTERS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-22", notes: "",
+          url: "https://saad-s-infinity-mirror-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Infinity-Mirror-v1.0" },
+      ],
+    },
+    {
+      title: "Fabricated Non-Lit Letters", cat: "nonlit",
+      eyebrow: "DIMENSIONAL FABRICATED LETTERS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://saad-s-fabricated-non-lit-letters-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Fabricated-Non-Lit-Letters-v1.0" },
+      ],
+    },
+    {
+      title: "Flat Cut Letters", cat: "nonlit",
+      eyebrow: "DIMENSIONAL FLAT CUT LETTERS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://saad-s-flat-cut-letters-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Flat-Cut-Letters-v1.0" },
+      ],
+    },
+    {
+      title: "Wall Plaque", cat: "nonlit",
+      eyebrow: "WALL PLAQUES",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://saad-s-wall-plaque-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Wall-Plaque-v1.0" },
+      ],
+    },
+    {
+      title: "Wooden Sign", cat: "nonlit",
+      eyebrow: "WOODEN SIGNS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://saad-s-wooden-sign-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Wooden-Sign" },
+      ],
+    },
+    {
+      title: "Vinyl Graphics", cat: "nonlit",
+      eyebrow: "VINYL GRAPHICS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-23", notes: "",
+          url: "https://saad-s-vinyl-graphics-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Vinyl-Graphics-v1.0" },
+      ],
+    },
+    {
+      title: "Blade Projected Sign", cat: "freestanding",
+      eyebrow: "BLADE/PROJECTING SIGNS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://saad-s-blade-projected-sign-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Blade-Projected-Sign-v1.0" },
+      ],
+    },
+    {
+      title: "Post & Panel Sign", cat: "freestanding",
+      eyebrow: "POST & PANEL SIGNS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-23", notes: "",
+          url: "https://saad-s-postpanel-sign-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Post-Panel-Sign-v1.0" },
+      ],
+    },
+    {
+      title: "Pylon Sign", cat: "freestanding",
+      eyebrow: "PYLON SIGNS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-23", notes: "",
+          url: "https://saad-s-pylon-sign-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Pylon-Sign-v1.0" },
+      ],
+    },
+    {
+      title: "A-Frame Sign", cat: "freestanding",
+      eyebrow: "A-FRAME SIGNS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-24", notes: "",
+          url: "https://saad-s-a-frame-sign-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-A-Frame-v1.0" },
+      ],
+    },
+    {
+      title: "Yard Sign", cat: "freestanding",
+      eyebrow: "YARD SIGNS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-24", notes: "",
+          url: "https://saad-s-yard-sign-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Yard-Sign" },
+      ],
+    },
+    {
+      title: "Monument Sign", cat: "freestanding",
+      eyebrow: "MONUMENT SIGNS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-24", notes: "",
+          url: "https://saad-s-monument-sign-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Monument-Sign-v1.0" },
+      ],
+    },
+    {
+      title: "Marquee Channel Letters", cat: "building",
+      eyebrow: "MARQUEE SIGNS",
+      versions: [  // newest first
+        { v: "1.0", date: "2026-07-21", notes: "",
+          url: "https://saad-s-marquee-channel-letters-v1.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-Marquee-Channel-Letters-v1.0" },
+      ],
+    },
+  ];
+
+  const GH_SVG = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>';
+
+  const esc = str => String(str).replace(/[&<>"]/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+  const slug = str => str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+  // Built as UTC so the date can't drift a day either way by timezone
+  function fmtDate(iso) {
+    if (!iso) return '';
+    const [y, m, d] = iso.split('-').map(Number);
+    return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString('en-US',
+      { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
+  }
+
+  function versionRow(ver, isLatest) {
+    return `
+          <li class="ver-row${isLatest ? ' is-latest' : ''}">
+            <div class="ver-meta">
+              <span class="ver-num">v${esc(ver.v)}</span>
+              ${isLatest ? '<span class="ver-tag">LATEST</span>' : ''}
+              ${ver.date ? `<time class="ver-date" datetime="${esc(ver.date)}">${esc(fmtDate(ver.date))}</time>` : ''}
+            </div>
+            ${ver.notes ? `<p class="ver-notes">${esc(ver.notes)}</p>` : ''}
+            <div class="ver-links">
+              <a href="${esc(ver.url)}" target="_blank" rel="noopener">Open studio &rarr;</a>
+              <a class="gh" href="${esc(ver.gh)}" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </li>`;
+  }
+
+  function cardHTML(sign) {
+    const versions = sign.versions;
+    const latest = versions[0];
+    const multi = versions.length > 1;
+    const panelId = `versions-${slug(sign.title)}`;
+    return `
+    <article class="card" data-cat="${esc(sign.cat)}">
+      <span class="eyebrow">${esc(sign.eyebrow)}</span>
+      <h3>${esc(sign.title)}${multi ? `<span class="ver-badge">v${esc(latest.v)}</span>` : ''}</h3>
+      <div class="card-foot">
+        <a class="card-link" href="${esc(latest.url)}" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>
+        <a class="gh-link" href="${esc(latest.gh)}" target="_blank" rel="noopener" aria-label="View source on GitHub">${GH_SVG} GitHub</a>${multi ? `
+        <button class="ver-toggle" type="button" aria-expanded="false" aria-controls="${panelId}">${versions.length} versions <span class="caret" aria-hidden="true">&#9660;</span></button>` : ''}
+      </div>${multi ? `
+      <div class="ver-panel" id="${panelId}" hidden>
+        <ol class="ver-list">${versions.map((v, i) => versionRow(v, i === 0)).join('')}
+        </ol>
+      </div>` : ''}
+    </article>`;
+  }
+
   const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+  grid.innerHTML = SIGNS.map(cardHTML).join('');
+
+  const cards = grid.querySelectorAll('.card');
+  const chips = document.querySelectorAll('.chip');
   const vbtns = document.querySelectorAll('.vbtn');
 
   chips.forEach(chip => {
@@ -596,6 +780,16 @@
       vbtns.forEach(b => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'));
       grid.classList.toggle('is-list', btn.dataset.view === 'list');
     });
+  });
+
+  // Cards are built at runtime, so delegate the expand clicks from the grid
+  grid.addEventListener('click', e => {
+    const toggle = e.target.closest('.ver-toggle');
+    if (!toggle) return;
+    const panel = document.getElementById(toggle.getAttribute('aria-controls'));
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+    panel.hidden = isOpen;
   });
 </script>
 </body>

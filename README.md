@@ -28,7 +28,7 @@ framework, no package manager.
 
 | Sign | Type | Studio | Source |
 |------|------|--------|--------|
-| Face‑Lit Channel Letters | Illuminated Dimensional Letters | [Open](https://saad-s-face-lit-channel-letters-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Face-Lit-Channel-Letters-v1.0) |
+| Face‑Lit Channel Letters **v2.0** | Illuminated Dimensional Letters | [Open](https://saad-s-face-lit-channel-letters-v2-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Face-Lit-Channel-Letters-v2.0) |
 | Halo‑Lit Channel Letters **v2.1** | Illuminated Dimensional Letters | [Open](https://saad-s-halo-lit-channel-letters-v2-1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Halo-Lit-Channel-Letters-v2.1) |
 | Face & Halo‑Lit Channel Letters | Illuminated Dimensional Letters | [Open](https://face-halo-lit-channel-letters-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Face-Halo-Lit-Channel-Letters-v1.0) |
 | Side‑Lit Channel Letters | Illuminated Dimensional Letters | [Open](https://saad-s-side-lit-channel-letters-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Side-Lit-Channel-Letters-v1.0) |

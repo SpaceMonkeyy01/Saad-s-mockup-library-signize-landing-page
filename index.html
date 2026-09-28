@@ -19,6 +19,8 @@
     --ink: #14243a;
     --muted: #6b7c93;
     --line: #dbe4f0;
+    --live: #0f7a52;
+    --live-wash: #e4f6ed;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -285,6 +287,47 @@
 
   .card:hover .arrow { transform: translateX(4px); }
 
+  /* ---------- Live status tag ---------- */
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .live-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--live);
+    background: var(--live-wash);
+    border: 1px solid #b8e3ce;
+    border-radius: 999px;
+    padding: 2px 8px 2px 6px;
+  }
+
+  .live-tag .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--live);
+    animation: live-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes live-pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(15, 122, 82, 0.45); }
+    50%      { opacity: 0.55; box-shadow: 0 0 0 4px rgba(15, 122, 82, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .live-tag .dot { animation: none; }
+  }
+
   /* ---------- Version badge, expand toggle & panel ---------- */
   .ver-badge {
     display: inline-block;
@@ -497,6 +540,7 @@
   const SIGNS = [
     {
       title: "Face-Lit Channel Letters", cat: "illuminated",
+      live: true,  // running in production on the client sites
       eyebrow: "ILLUMINATED DIMENSIONAL LETTERS",
       versions: [  // newest first
         { v: "2.0", date: "2026-09-02", notes: "Improved version after v1 QC.",
@@ -509,6 +553,7 @@
     },
     {
       title: "Halo-Lit Channel Letters", cat: "illuminated",
+      live: true,  // running in production on the client sites
       eyebrow: "ILLUMINATED DIMENSIONAL LETTERS",
       versions: [  // newest first
         { v: "2.1", date: "2026-09-01", notes: "Halo-Lit metal variants are added.",
@@ -742,7 +787,10 @@
     const panelId = `versions-${slug(sign.title)}`;
     return `
     <article class="card" data-cat="${esc(sign.cat)}">
-      <span class="eyebrow">${esc(sign.eyebrow)}</span>
+      <div class="card-top">
+        <span class="eyebrow">${esc(sign.eyebrow)}</span>${sign.live ? `
+        <span class="live-tag" title="Live in production on our other websites"><span class="dot" aria-hidden="true"></span>LIVE</span>` : ''}
+      </div>
       <h3>${esc(sign.title)}${multi ? `<span class="ver-badge">v${esc(latest.v)}</span>` : ''}</h3>
       <div class="card-foot">
         <a class="card-link" href="${esc(latest.url)}" target="_blank" rel="noopener">Open mockup studio <span class="arrow">&rarr;</span></a>

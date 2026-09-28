@@ -21,6 +21,8 @@
     --line: #dbe4f0;
     --live: #0f7a52;
     --live-wash: #e4f6ed;
+    --testing: #97600a;
+    --testing-wash: #fdf2de;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -295,7 +297,7 @@
     gap: 10px;
   }
 
-  .live-tag {
+  .status-tag {
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -304,20 +306,39 @@
     font-size: 0.58rem;
     font-weight: 500;
     letter-spacing: 0.14em;
-    color: var(--live);
-    background: var(--live-wash);
-    border: 1px solid #b8e3ce;
     border-radius: 999px;
     padding: 2px 8px 2px 6px;
   }
 
-  .live-tag .dot {
+  .status-tag .dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--live);
-    animation: live-pulse 2s ease-in-out infinite;
+    background: currentColor;
   }
+
+  .status-live {
+    color: var(--live);
+    background: var(--live-wash);
+    border: 1px solid #b8e3ce;
+  }
+
+  .status-live .dot { animation: live-pulse 2s ease-in-out infinite; }
+
+  .status-testing {
+    color: var(--testing);
+    background: var(--testing-wash);
+    border: 1px solid #ebd2a1;
+  }
+
+  /* Neutral by design -- an untested sign shouldn't compete with the other two */
+  .status-na {
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--line);
+  }
+
+  .status-na .dot { background: #c3cede; }
 
   @keyframes live-pulse {
     0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(15, 122, 82, 0.45); }
@@ -325,7 +346,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .live-tag .dot { animation: none; }
+    .status-tag .dot { animation: none; }
   }
 
   /* ---------- Version badge, expand toggle & panel ---------- */
@@ -540,7 +561,7 @@
   const SIGNS = [
     {
       title: "Face-Lit Channel Letters", cat: "illuminated",
-      live: true,  // running in production on the client sites
+      status: "live",
       eyebrow: "ILLUMINATED DIMENSIONAL LETTERS",
       versions: [  // newest first
         { v: "2.0", date: "2026-09-02", notes: "Improved version after v1 QC.",
@@ -553,7 +574,7 @@
     },
     {
       title: "Halo-Lit Channel Letters", cat: "illuminated",
-      live: true,  // running in production on the client sites
+      status: "live",
       eyebrow: "ILLUMINATED DIMENSIONAL LETTERS",
       versions: [  // newest first
         { v: "2.1", date: "2026-09-01", notes: "Halo-Lit metal variants are added.",
@@ -614,6 +635,7 @@
     },
     {
       title: "LightBox Cabinet", cat: "illuminated",
+      status: "testing",
       eyebrow: "LIGHTBOX/CABINET SIGNS",
       versions: [  // newest first
         { v: "1.0", date: "2026-07-21", notes: "",
@@ -641,6 +663,7 @@
     },
     {
       title: "Fabricated Non-Lit Letters", cat: "nonlit",
+      status: "testing",
       eyebrow: "DIMENSIONAL FABRICATED LETTERS",
       versions: [  // newest first
         { v: "1.0", date: "2026-07-21", notes: "",
@@ -749,6 +772,14 @@
     },
   ];
 
+  /* Rollout state per sign type. A sign with no `status` falls through to
+     `na`, so only the live/testing ones need marking in the array above. */
+  const STATUS = {
+    live:    { key: 'live',    label: 'LIVE',    hint: 'Live in production on our other websites' },
+    testing: { key: 'testing', label: 'TESTING', hint: 'In testing -- not yet released to production' },
+    na:      { key: 'na',      label: 'N/A',     hint: 'Not deployed yet' },
+  };
+
   const GH_SVG = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>';
 
   const esc = str => String(str).replace(/[&<>"]/g, c =>
@@ -781,6 +812,7 @@
   }
 
   function cardHTML(sign) {
+    const st = STATUS[sign.status] || STATUS.na;
     const versions = sign.versions;
     const latest = versions[0];
     const multi = versions.length > 1;
@@ -788,8 +820,8 @@
     return `
     <article class="card" data-cat="${esc(sign.cat)}">
       <div class="card-top">
-        <span class="eyebrow">${esc(sign.eyebrow)}</span>${sign.live ? `
-        <span class="live-tag" title="Live in production on our other websites"><span class="dot" aria-hidden="true"></span>LIVE</span>` : ''}
+        <span class="eyebrow">${esc(sign.eyebrow)}</span>
+        <span class="status-tag status-${st.key}" title="${esc(st.hint)}"><span class="dot" aria-hidden="true"></span>${esc(st.label)}</span>
       </div>
       <h3>${esc(sign.title)}${multi ? `<span class="ver-badge">v${esc(latest.v)}</span>` : ''}</h3>
       <div class="card-foot">

@@ -35,8 +35,8 @@ framework, no package manager.
 | Face & Side‑Lit Channel Letters | Illuminated Dimensional Letters | [Open](https://saad-s-face-side-lit-channel-letters-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Face-Side-Lit-Channel-Letters-v1.0) |
 | Open Face Neon | Illuminated Dimensional Letters | [Open](https://saad-s-open-face-neon-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-Open-Face-Neon-v1.0) |
 | LED Neon | LED Neon Signs | [Open](https://saad-s-led-neon-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-LED-Neon-v1.0) |
-| LightBox Cabinet | Lightbox/Cabinet Signs | [Open](https://saad-s-lightbox-cabinet-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-LightBox-Cabinet-v1.0) |
-| Push‑Through Signage | Push‑Through Signage | [Open](https://saad-s-pushthrough-v1.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-PushThrough-v1.0) |
+| LightBox Cabinet **v2.0** | Lightbox/Cabinet Signs | [Open](https://saad-s-lightbox-cabinet-v2-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-LightBox-Cabinet-v2.0) |
+| Push‑Through Signage **v2.0** | Push‑Through Signage | [Open](https://saad-s-pushthrough-v2-0.ai.studio/) | [GitHub](https://github.com/SpaceMonkeyy01/Saad-s-PushThrough-v2.0) |
 
 ### Non‑Illuminated
 
@@ -71,6 +71,20 @@ v1.0. Dates are when the version landed in this library.
 | **v2.1** *(latest)* | 2026‑09‑01 | Halo‑Lit metal variants are added. |
 | v2.0 | 2026‑08‑25 | Improved version after v1 QC. |
 | v1.0 | 2026‑07‑21 | Initial release. |
+
+### LightBox Cabinet
+
+| Version | Date | Notes |
+|---------|------|-------|
+| **v2.0** *(latest, testing)* | 2026‑10‑05 | In testing. |
+| v1.0 *(live)* | 2026‑07‑21 | Initial release. |
+
+### Push‑Through Signage
+
+| Version | Date | Notes |
+|---------|------|-------|
+| **v2.0** *(latest, testing)* | 2026‑10‑05 | In testing. |
+| v1.0 *(live)* | 2026‑07‑21 | Initial release. |
 
 ## Adding a sign or a version
 

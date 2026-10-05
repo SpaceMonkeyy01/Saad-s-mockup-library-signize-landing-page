@@ -635,10 +635,13 @@
     },
     {
       title: "LightBox Cabinet", cat: "illuminated",
-      status: "testing",
+      status: "live",
       eyebrow: "LIGHTBOX/CABINET SIGNS",
       versions: [  // newest first
-        { v: "1.0", date: "2026-07-21", notes: "",
+        { v: "2.0", date: "2026-10-05", notes: "", status: "testing",
+          url: "https://saad-s-lightbox-cabinet-v2-0.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-LightBox-Cabinet-v2.0" },
+        { v: "1.0", date: "2026-07-21", notes: "", status: "live",
           url: "https://saad-s-lightbox-cabinet-v1.ai.studio/",
           gh:  "https://github.com/SpaceMonkeyy01/Saad-s-LightBox-Cabinet-v1.0" },
       ],
@@ -648,7 +651,10 @@
       status: "live",
       eyebrow: "PUSH-THROUGH SIGNAGE",
       versions: [  // newest first
-        { v: "1.0", date: "2026-07-21", notes: "",
+        { v: "2.0", date: "2026-10-05", notes: "", status: "testing",
+          url: "https://saad-s-pushthrough-v2-0.ai.studio/",
+          gh:  "https://github.com/SpaceMonkeyy01/Saad-s-PushThrough-v2.0" },
+        { v: "1.0", date: "2026-07-21", notes: "", status: "live",
           url: "https://saad-s-pushthrough-v1.ai.studio/",
           gh:  "https://github.com/SpaceMonkeyy01/Saad-s-PushThrough-v1.0" },
       ],
@@ -774,7 +780,9 @@
   ];
 
   /* Rollout state per sign type. A sign with no `status` falls through to
-     `na`, so only the live/testing ones need marking in the array above. */
+     `na`, so only the live/testing ones need marking in the array above.
+     A version may also carry its own `status` (e.g. v1 live, v2 testing);
+     it is shown on that row of the version history. */
   const STATUS = {
     live:    { key: 'live',    label: 'LIVE',    hint: 'Live in production on our other websites' },
     testing: { key: 'testing', label: 'TESTING', hint: 'In testing -- not yet released to production' },
@@ -796,12 +804,16 @@
       { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
   }
 
+  const statusTag = st =>
+    `<span class="status-tag status-${st.key}" title="${esc(st.hint)}"><span class="dot" aria-hidden="true"></span>${esc(st.label)}</span>`;
+
   function versionRow(ver, isLatest) {
     return `
           <li class="ver-row${isLatest ? ' is-latest' : ''}">
             <div class="ver-meta">
               <span class="ver-num">v${esc(ver.v)}</span>
               ${isLatest ? '<span class="ver-tag">LATEST</span>' : ''}
+              ${STATUS[ver.status] ? statusTag(STATUS[ver.status]) : ''}
               ${ver.date ? `<time class="ver-date" datetime="${esc(ver.date)}">${esc(fmtDate(ver.date))}</time>` : ''}
             </div>
             ${ver.notes ? `<p class="ver-notes">${esc(ver.notes)}</p>` : ''}
@@ -822,7 +834,7 @@
     <article class="card" data-cat="${esc(sign.cat)}">
       <div class="card-top">
         <span class="eyebrow">${esc(sign.eyebrow)}</span>
-        <span class="status-tag status-${st.key}" title="${esc(st.hint)}"><span class="dot" aria-hidden="true"></span>${esc(st.label)}</span>
+        ${statusTag(st)}
       </div>
       <h3>${esc(sign.title)}${multi ? `<span class="ver-badge">v${esc(latest.v)}</span>` : ''}</h3>
       <div class="card-foot">
